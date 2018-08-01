@@ -10,9 +10,13 @@ Takes an input file that has at least a `uuid` and an `host_name` column to dele
 
 For any sensors in the CSV file, the script with check if the sensor matches an existing sensor on the cluster, and if the uuid and hostname matches. If it does it will delete. If delete is successful, the csv file will get updated with an extra column `deleted`.
 
+To run in dry run mode (does everything except delete) use `--dry` in command args.
+
 Command syntax:
 
 `python delete_from_csv.py input_file.csv`
+
+`python delete_from_csv.py input_file.csv --dry`
 
 Note: input_file will be modified by the script.
 

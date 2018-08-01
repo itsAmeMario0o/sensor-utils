@@ -29,7 +29,7 @@ def get_sensor(uuid):
         pprint("Populating sensors...")
         populate_sensors()
     
-    c = current_sensors.get(uuid, None)
+    c = current_sensors.get(uuid, {})
     if c.get("deleted_at", None) is not None:
         return None
     else:
@@ -60,7 +60,7 @@ def delete_sensor(uuid):
 
     return resp
 
-def csv_reader(path, action):
+def csv_reader(path, action, dry):
     with open(path, 'rb') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -72,11 +72,16 @@ def csv_reader(path, action):
                     pprint("sensor not matching.")
                 else:
                     pprint("deleting sensor...")
-                    resp = delete_sensor(row.get("uuid"))
-                    if resp.status_code > 199 and resp.status_code < 300:
+                    if not dry:
+                        resp = delete_sensor(row.get("uuid"))
+                        if resp.status_code > 199 and resp.status_code < 300:
+                            pprint("updating csv...")
+                            update_csv(path, row.get("uuid"))
+                        pprint(resp)
+                    else:
+                        pprint("dry run...")
                         pprint("updating csv...")
                         update_csv(path, row.get("uuid"))
-                    pprint(resp)
             elif action == "get":
                 get_sensor(row.get("uuid"))
             
@@ -84,9 +89,15 @@ def csv_reader(path, action):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("sensors", help="path to csv file")
+    parser.add_argument("--dry", nargs='?', help="simulate, do not execute")
     args = parser.parse_args()
 
-    csv_reader(args.sensors, "delete")
+    dryrun = False
+
+    if args.dry is not None:
+        dryrun = True
+
+    csv_reader(args.sensors, "delete", dryrun)
 
 if __name__ == "__main__":
     main()
