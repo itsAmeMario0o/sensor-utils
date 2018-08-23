@@ -69,6 +69,8 @@ def csv_reader(path, action, dry):
                 pprint("checking sensor...")
                 s = get_sensor(row.get("uuid"))
                 if s is None or s.get("host_name") != row.get("host_name"):
+                    if dry:
+                        pprint("dry run...")
                     pprint("sensor not matching.")
                 else:
                     pprint("deleting sensor...")
@@ -89,15 +91,10 @@ def csv_reader(path, action, dry):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("sensors", help="path to csv file")
-    parser.add_argument("--dry", nargs='?', help="simulate, do not execute")
+    parser.add_argument("--dry", action='store_true', help="simulate, do not execute")
     args = parser.parse_args()
 
-    dryrun = False
-
-    if args.dry is not None:
-        dryrun = True
-
-    csv_reader(args.sensors, "delete", dryrun)
+    csv_reader(args.sensors, "delete", args.dry)
 
 if __name__ == "__main__":
     main()
