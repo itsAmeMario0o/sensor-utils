@@ -20,4 +20,4 @@ for tenant, hosts in tenants.items():
     if tenant != "Tetration":
         print "{} (count = {}):".format(tenant, len(hosts))
         for host in hosts:
-                print "\t{}".format(host)
+            print "\t{}".format(host)
