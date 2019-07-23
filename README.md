@@ -1,6 +1,20 @@
 # Tetration Sensor Management Tools
 
-This repo host some simple tool to help with sensor management at scale.
+This repo host some simple tools to help with sensor management at scale.
+
+Tetration sensors are used to gather network and application telementry from distributed workloads.
+
+When sensors register with Tetration, they create a "sensor record".
+
+The scripts in this repository help automate some of the common sensor workflows customers might do in the UI, like deleting inactive sensor records, however these scripts use the API which can operate on multiple sensors in bulk, which is useful when dealing with thousands of sensors.
+
+### Installing
+
+Clone this repository and ensure you have the Tetration API client installed 
+
+`git clone https://github.com/tetration-exchange/policy-utils.git`
+
+`pip install tetpyclient`
 
 ## Files
 
@@ -37,4 +51,4 @@ Command syntax:
 
 ## License
 
-Please refer to the file *LICENSE.pdf* in same directory of this README file.
+Please refer to the file *LICENSE* in same directory of this README file.
